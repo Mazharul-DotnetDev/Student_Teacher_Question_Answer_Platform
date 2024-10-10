@@ -1,0 +1,12 @@
+﻿@model List<StudentTeacherQnAPlatform.Entities.Answer>
+
+<h2>My Answers</h2>
+
+<ul>
+    @foreach (var answer in Model)
+    {
+        <li>
+            Answered Question: <strong>@answer.Question.Title</strong> - @answer.Content
+        </li>
+    }
+</ul>

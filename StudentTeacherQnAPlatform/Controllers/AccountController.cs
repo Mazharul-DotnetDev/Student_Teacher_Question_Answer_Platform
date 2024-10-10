@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using StudentTeacherQnAPlatform.Entities;
 using StudentTeacherQnAPlatform.Entities.Security;
 using StudentTeacherQnAPlatform.Repositories;
 using StudentTeacherQnAPlatform.Repositories.IRepository;
@@ -77,8 +78,8 @@ namespace StudentTeacherQnAPlatform.Controllers
         [HttpGet]
         public IActionResult TeacherDashboard()
         {
-            var recentQuestions = _questionService.GetRecentQuestionsForTeachers();
-            return View(recentQuestions);
+            var unansweredQuestions = _questionService.GetUnansweredQuestions();
+            return View(unansweredQuestions);
         }
 
         [HttpGet]
@@ -96,5 +97,77 @@ namespace StudentTeacherQnAPlatform.Controllers
             return View(questionsToModerate);
 
         }
+
+        public IActionResult StudentDashboard()
+        {
+            var questions = _questionService.GetRecentQuestions();
+            return View(questions);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostQuestion(string title, string content)
+        {
+            var userId = int.Parse(HttpContext.Session.GetString("UserId"));
+            var question = new Question
+            {
+                Title = title,
+                Content = content,
+                UserId = userId,
+                CreatedDate = DateTime.UtcNow
+            };
+
+            await _questionService.AddQuestionAsync(question);
+            return RedirectToAction("StudentDashboard");
+        }
+
+        public IActionResult MyQuestions()
+        {
+            var userId = int.Parse(HttpContext.Session.GetString("UserId"));
+            var questions = _questionService.GetQuestionsByUserId(userId);
+            return View(questions);
+        }
+
+        [HttpGet]
+        public IActionResult AnswerQuestion(int id)
+        {
+            var question = _questionService.GetQuestionById(id);
+            return View(question);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SubmitAnswer(int questionId, string content)
+        {
+            var userId = int.Parse(HttpContext.Session.GetString("UserId"));
+            var answer = new Answer
+            {
+                Content = content,
+                QuestionId = questionId,
+                TeacherId = userId
+            };
+
+            await _questionService.AddAnswerAsync(answer);
+            return RedirectToAction("TeacherDashboard");
+        }
+
+        public IActionResult MyAnswers()
+        {
+            var teacherId = int.Parse(HttpContext.Session.GetString("UserId"));
+            var answers = _questionService.GetAnswersByTeacherId(teacherId);
+            return View(answers);
+        }
+
+        public IActionResult ModerationPanel()
+        {
+            var allQuestions = _questionService.GetAllQuestions();
+            return View(allQuestions);
+        }
+
+        public async Task<IActionResult> RemoveQuestion(int id)
+        {
+            await _questionService.RemoveQuestionAsync(id);
+            return RedirectToAction("ModerationPanel");
+        }
+
+
     }
 }

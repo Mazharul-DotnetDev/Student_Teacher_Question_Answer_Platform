@@ -1,0 +1,12 @@
+﻿@model StudentTeacherQnAPlatform.Entities.Question
+
+<h2>Answer Question: @Model.Title</h2>
+
+<form asp-action="SubmitAnswer" method="post">
+    <input type="hidden" name="questionId" value="@Model.Id" />
+    <div class="form-group">
+        <label for="Content">Your Answer</label>
+        <textarea id="Content" name="content" class="form-control" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Answer</button>
+</form>

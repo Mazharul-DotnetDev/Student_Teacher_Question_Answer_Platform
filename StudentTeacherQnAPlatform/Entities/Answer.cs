@@ -9,13 +9,9 @@ namespace StudentTeacherQnAPlatform.Entities
 
         [Required]
         public string Content { get; set; }
-
         public int QuestionId { get; set; }
-
         public Question Question { get; set; }
-
         public int TeacherId { get; set; }
-
         public User Teacher { get; set; }
     }
 }

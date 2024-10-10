@@ -1,0 +1,13 @@
+﻿@model List<StudentTeacherQnAPlatform.Entities.Question>
+
+<h2>Moderation Panel</h2>
+
+<ul>
+    @foreach (var question in Model)
+    {
+        <li>
+            <strong>@question.Title</strong> - @question.Content
+            <a href="@Url.Action("RemoveQuestion", "Account", new { id = question.Id })">Remove</a>
+        </li>
+    }
+</ul>

@@ -1,0 +1,17 @@
+﻿@model List<StudentTeacherQnAPlatform.Entities.Question>
+
+@{
+    ViewData["Title"] = "My Questions";
+}
+
+<h2>My Questions</h2>
+
+<ul>
+    @foreach (var question in Model)
+    {
+        <li>
+            <strong>@question.Title</strong> - @question.Content
+            <a href="@Url.Action("ViewAnswers", "Account", new { id = question.Id })">View Answers</a>
+        </li>
+    }
+</ul>

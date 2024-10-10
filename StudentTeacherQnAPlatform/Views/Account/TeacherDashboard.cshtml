@@ -20,3 +20,15 @@
         }
     </ul>
 </div>
+
+
+<h4>Unanswered Questions</h4>
+<ul>
+    @foreach (var question in Model)
+    {
+        <li>
+            <strong>@question.Title</strong> - @question.Content
+            <a href="@Url.Action("AnswerQuestion", "Account", new { id = question.Id })">Answer</a>
+        </li>
+    }
+</ul>

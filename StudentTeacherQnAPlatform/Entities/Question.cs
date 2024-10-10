@@ -12,6 +12,7 @@ namespace StudentTeacherQnAPlatform.Entities
 
         [Required]
         public string Content { get; set; }
+
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
         public bool IsModerated { get; set; } = false;
@@ -19,5 +20,6 @@ namespace StudentTeacherQnAPlatform.Entities
         public int UserId { get; set; }
 
         public User User { get; set; }
+        public virtual ICollection<Answer> Answers { get; set; } = new List<Answer>();
     }
 }
