@@ -11,6 +11,7 @@ namespace StudentTeacherQnAPlatform.Entities
         public string Content { get; set; }
         public int QuestionId { get; set; }
         public Question Question { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         public int TeacherId { get; set; }
         public User Teacher { get; set; }
     }

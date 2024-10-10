@@ -1,12 +1,46 @@
 ﻿@model StudentTeacherQnAPlatform.Entities.Question
 
-<h2>Answer Question: @Model.Title</h2>
+<h2>@Model.Title</h2>
 
+<p>@Model.Content</p>
+<p>
+    <strong>Asked by:</strong>
+    @if (Model.User != null)
+    {
+        @Model.User.Name
+    }
+    else
+    {
+        <em>Unknown</em>
+    }
+    on @Model.CreatedDate
+</p>
+
+<h3>Answers</h3>
+
+@if (Model.Answers != null && Model.Answers.Any())
+{
+    <ul>
+        @foreach (var answer in Model.Answers)
+        {
+            <li>
+                <strong>@answer.Teacher?.Name:</strong> @answer.Content
+                <p><small>Posted on @answer.CreatedDate</small></p>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No answers yet. Be the first to answer!</p>
+}
+
+<h4>Your Answer</h4>
 <form id="answer-form">
     <input type="hidden" name="questionId" value="@Model.Id" />
     <div class="form-group">
-        <label for="Content">Your Answer</label>
-        <textarea id="Content" name="Content" class="form-control" required></textarea>
+        <label for="Content">Answer</label>
+        <textarea id="Content" name="content" class="form-control" rows="6" required></textarea>
     </div>
     <button type="submit" class="btn btn-primary">Submit Answer</button>
 </form>
@@ -30,34 +64,14 @@
                 data: { questionId: questionId, content: content },
                 success: function () {
                     alert('Answer submitted successfully!');
-                    window.location.href = '@Url.Action("TeacherDashboard", "Account")';
+                    console.log('Answer submission successful');
+                    window.location.reload();
                 },
                 error: function (error) {
                     console.error('Error posting answer:', error);
                 }
             });
         }
+
     </script>
 }
-
-
-
-
-
-
-
-
-
-@* @model StudentTeacherQnAPlatform.Entities.Question
-
-<h2>Answer Question: @Model.Title</h2>
-
-<form asp-action="SubmitAnswer" method="post">
-    <input type="hidden" name="questionId" value="@Model.Id" />
-    <div class="form-group">
-        <label for="Content">Your Answer</label>
-        <textarea id="Content" name="content" class="form-control" required></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit Answer</button>
-</form>
- *@

@@ -1,0 +1,13 @@
+﻿<h2>Ask a Question</h2>
+
+<form asp-action="AskQuestion" method="post">
+    <div class="form-group">
+        <label for="Title">Question Title</label>
+        <input type="text" id="Title" name="title" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="Content">Question Content</label>
+        <textarea id="Content" name="content" class="form-control" rows="6" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Question</button>
+</form>

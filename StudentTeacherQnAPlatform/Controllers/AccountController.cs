@@ -50,6 +50,24 @@ namespace StudentTeacherQnAPlatform.Controllers
             return View();
         }
 
+        //[HttpPost]
+        //public async Task<IActionResult> Login(string email, string password)
+        //{
+        //    var user = await _userService.GetUserByEmailAsync(email);
+        //    if (user != null)
+        //    {
+        //        var result = new PasswordHasher<User>().VerifyHashedPassword(user, user.PasswordHash, password);
+        //        if (result == PasswordVerificationResult.Success)
+        //        {
+        //            HttpContext.Session.SetString("UserId", user.Id.ToString());
+        //            HttpContext.Session.SetString("RoleId", user.RoleId.ToString());
+        //            return RedirectToAction("Index", "Home");
+        //        }
+        //    }
+        //    ModelState.AddModelError("", "Invalid login attempt.");
+        //    return View();
+        //}
+
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
@@ -60,13 +78,14 @@ namespace StudentTeacherQnAPlatform.Controllers
                 if (result == PasswordVerificationResult.Success)
                 {
                     HttpContext.Session.SetString("UserId", user.Id.ToString());
-                    HttpContext.Session.SetString("RoleId", user.RoleId.ToString());
                     return RedirectToAction("Index", "Home");
                 }
             }
+
             ModelState.AddModelError("", "Invalid login attempt.");
             return View();
         }
+
 
 
         public IActionResult Logout()
@@ -134,20 +153,20 @@ namespace StudentTeacherQnAPlatform.Controllers
             return View(question);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SubmitAnswer(int questionId, string content)
-        {
-            var userId = int.Parse(HttpContext.Session.GetString("UserId"));
-            var answer = new Answer
-            {
-                Content = content,
-                QuestionId = questionId,
-                TeacherId = userId
-            };
+        //[HttpPost]
+        //public async Task<IActionResult> SubmitAnswer(int questionId, string content)
+        //{
+        //    var userId = int.Parse(HttpContext.Session.GetString("UserId"));
+        //    var answer = new Answer
+        //    {
+        //        Content = content,
+        //        QuestionId = questionId,
+        //        TeacherId = userId
+        //    };
 
-            await _questionService.AddAnswerAsync(answer);
-            return RedirectToAction("TeacherDashboard");
-        }
+        //    await _questionService.AddAnswerAsync(answer);
+        //    return RedirectToAction("TeacherDashboard");
+        //}
 
         public IActionResult MyAnswers()
         {
@@ -167,6 +186,105 @@ namespace StudentTeacherQnAPlatform.Controllers
             await _questionService.RemoveQuestionAsync(id);
             return RedirectToAction("ModerationPanel");
         }
+
+        [HttpGet]
+        public JsonResult GetRecentQuestions()
+        {
+            var questions = _questionService.GetRecentQuestions();
+            return Json(questions);
+        }
+
+        public IActionResult AllQuestions()
+        {
+            var questions = _questionService.GetAllQuestions();
+            return View(questions);
+        }
+
+        public IActionResult AskQuestion()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AskQuestion(string title, string content)
+        {
+            var userId = int.Parse(HttpContext.Session.GetString("UserId"));
+
+            var question = new Question
+            {
+                Title = title,
+                Content = content,
+                UserId = userId,
+                CreatedDate = DateTime.UtcNow
+            };
+
+            await _questionService.AddQuestionAsync(question);
+
+            return RedirectToAction("AllQuestions");
+        }
+
+        //public IActionResult QuestionDetails(int id)
+        //{
+        //    var question = _questionService.GetQuestionById(id);
+        //    return View(question);
+        //}
+
+        public async Task<IActionResult> QuestionDetails(int id)
+        {
+            var question = await _questionService.GetQuestionDetailsAsync(id);
+
+            if (question == null)
+            {
+                return NotFound();
+            }
+
+            return View(question);
+        }
+
+
+        //[HttpPost]
+        //public async Task<IActionResult> SubmitAnswer(int questionId, string content)
+        //{
+        //    var userId = int.Parse(HttpContext.Session.GetString("UserId"));
+
+        //    var answer = new Answer
+        //    {
+        //        Content = content,
+        //        QuestionId = questionId,
+        //        TeacherId = userId,
+        //        CreatedDate = DateTime.UtcNow
+        //    };
+
+        //    await _questionService.AddAnswerAsync(answer);
+
+        //    return Ok();
+        //}
+
+        [HttpPost]
+        public async Task<IActionResult> SubmitAnswer(int questionId, string content)
+        {
+            var userIdString = HttpContext.Session.GetString("UserId");
+
+            if (string.IsNullOrEmpty(userIdString))
+            {
+                return BadRequest("You must be logged in to submit an answer.");
+            }
+            
+            int userId = int.Parse(userIdString);
+
+            var answer = new Answer
+            {
+                Content = content,
+                QuestionId = questionId,
+                TeacherId = userId,
+                CreatedDate = DateTime.UtcNow
+            };
+
+            await _questionService.AddAnswerAsync(answer);
+
+            return Ok();
+        }
+
 
 
     }

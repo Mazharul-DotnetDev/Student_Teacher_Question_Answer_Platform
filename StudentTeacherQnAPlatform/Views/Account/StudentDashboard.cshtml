@@ -1,5 +1,101 @@
 ﻿@model List<StudentTeacherQnAPlatform.Entities.Question>
 
+<h2>Student Dashboard</h2>
+
+<div>
+    <h3>Recent Questions</h3>
+    <div id="questions-container">
+        <!-- Questions will be loaded here -->
+    </div>
+
+    <h4>Post a New Question</h4>
+    <form id="question-form">
+        <div class="form-group">
+            <label for="Title">Title</label>
+            <input type="text" id="Title" name="Title" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label for="Content">Content</label>
+            <textarea id="Content" name="Content" class="form-control" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Question</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#question-form').on('submit', function (e) {
+                if (!$('#Title').val() || !$('#Content').val()) {
+                    alert('Please fill in all fields.');
+                    return false;
+                }
+            });
+
+            
+            loadRecentQuestions();
+
+            
+            $('#question-form').on('submit', function (e) {
+                e.preventDefault();
+                postQuestion();
+            });
+        });
+
+        function loadRecentQuestions() {
+            $.ajax({
+                url: '@Url.Action("GetRecentQuestions", "Account")',
+                type: 'GET',
+                success: function (data) {
+                    var questionsHtml = '';
+                    $.each(data, function (index, question) {
+                        questionsHtml += '<div class="question-item">';
+                        questionsHtml += '<strong>' + question.Title + '</strong><br />';
+                        questionsHtml += question.Content + '<br />';
+                        questionsHtml += '<a href="@Url.Action("ViewAnswers", "Account")?id=' + question.Id + '">View Answers</a>';
+                        questionsHtml += '</div>';
+                    });
+                    $('#questions-container').html(questionsHtml);
+                },
+                error: function (error) {
+                    console.error('Error loading questions:', error);
+                }
+            });
+        }
+
+        function postQuestion() {
+            var title = $('#Title').val();
+            var content = $('#Content').val();
+
+            $.ajax({
+                url: '@Url.Action("PostQuestion", "Account")',
+                type: 'POST',
+                data: { Title: title, Content: content },
+                success: function () {
+                    loadRecentQuestions();
+                    $('#Title').val('');
+                    $('#Content').val('');
+                },
+                error: function (error) {
+                    console.error('Error posting question:', error);
+                }
+            });
+        }
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+@* @model List<StudentTeacherQnAPlatform.Entities.Question>
+
 @{
     ViewData["Title"] = "Student Dashboard";
 }
@@ -31,3 +127,4 @@
         <button type="submit" class="btn btn-primary">Submit Question</button>
     </form>
 </div>
+ *@

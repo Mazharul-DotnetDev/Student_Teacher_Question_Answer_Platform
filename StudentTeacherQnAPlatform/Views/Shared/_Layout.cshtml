@@ -20,11 +20,14 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AllQuestions">Questions</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                        @if (Context.Session.GetString("UserId") != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AskQuestion">Ask Question</a>
+                            </li>
+                        }
                     </ul>
                     <ul class="navbar-nav">
                         @if (Context.Session.GetString("UserId") != null)
@@ -32,18 +35,6 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
                             </li>
-                            @if (Context.Session.GetString("RoleId") == "2")
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="TeacherDashboard">Teacher Dashboard</a>
-                                </li>
-                            }
-                            else if (Context.Session.GetString("RoleId") == "3")
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="ModeratorDashboard">Moderator Dashboard</a>
-                                </li>
-                            }
                         }
                         else
                         {

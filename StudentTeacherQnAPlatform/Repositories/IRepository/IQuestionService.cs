@@ -15,5 +15,6 @@ namespace StudentTeacherQnAPlatform.Repositories.IRepository
         List<Question> GetQuestionsByUserId(int userId);
         Question GetQuestionById(int id);
         List<Answer> GetAnswersByTeacherId(int teacherId);
+        Task<Question> GetQuestionDetailsAsync(int id);
     }
 }

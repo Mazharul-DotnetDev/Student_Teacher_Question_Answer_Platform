@@ -1,6 +1,7 @@
 ﻿using StudentTeacherQnAPlatform.Entities.Data;
 using StudentTeacherQnAPlatform.Entities;
 using StudentTeacherQnAPlatform.Repositories.IRepository;
+using Microsoft.EntityFrameworkCore;
 
 namespace StudentTeacherQnAPlatform.Repositories
 {
@@ -55,7 +56,8 @@ namespace StudentTeacherQnAPlatform.Repositories
 
         public List<Question> GetAllQuestions()
         {
-            return _context.Questions.ToList();
+            //return _context.Questions.ToList();
+            return _context.Questions.Include(q => q.User).ToList();
         }
 
         public async Task RemoveQuestionAsync(int questionId)
@@ -76,6 +78,15 @@ namespace StudentTeacherQnAPlatform.Repositories
         public Question GetQuestionById(int id)
         {
             return _context.Questions.FirstOrDefault(q => q.Id == id);
+        }
+
+        public async Task<Question> GetQuestionDetailsAsync(int id)
+        {
+            return await _context.Questions
+                .Include(q => q.User)
+                .Include(q => q.Answers)
+                    .ThenInclude(a => a.Teacher)
+                .FirstOrDefaultAsync(q => q.Id == id);
         }
     }
 }
