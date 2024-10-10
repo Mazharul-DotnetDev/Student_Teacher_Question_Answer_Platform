@@ -1,0 +1,22 @@
+﻿@model List<StudentTeacherQnAPlatform.Entities.Question>
+@{
+    ViewData["Title"] = "Teacher Dashboard";
+}
+
+<h2>Teacher Dashboard</h2>
+
+<div>
+    <h3>Welcome, @Context.Session.GetString("UserId")!</h3>
+    <p>Here you can see the latest questions from students and answer them.</p>
+    
+    <h4>Recent Questions</h4>
+    <ul>
+        @foreach (var question in Model)
+        {
+            <li>
+                <strong>@question.Title</strong> - @question.Content
+                <a href="@Url.Action("AnswerQuestion", "Account", new { id = question.Id })">Answer</a>
+            </li>
+        }
+    </ul>
+</div>

@@ -32,6 +32,18 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
                             </li>
+                            @if (Context.Session.GetString("RoleId") == "2")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="TeacherDashboard">Teacher Dashboard</a>
+                                </li>
+                            }
+                            else if (Context.Session.GetString("RoleId") == "3")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="ModeratorDashboard">Moderator Dashboard</a>
+                                </li>
+                            }
                         }
                         else
                         {

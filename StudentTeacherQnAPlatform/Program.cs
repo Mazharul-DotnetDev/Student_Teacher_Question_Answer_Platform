@@ -16,7 +16,9 @@ namespace StudentTeacherQnAPlatform
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
-            
+            builder.Services.AddScoped<IQuestionService, QuestionService>();
+
+
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
