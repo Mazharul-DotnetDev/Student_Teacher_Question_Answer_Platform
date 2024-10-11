@@ -119,9 +119,16 @@ namespace StudentTeacherQnAPlatform.Controllers
         [HttpGet]
         public IActionResult AnswerQuestion(int id)
         {
-            var question = _questionService.GetQuestionById(id);
-            return View(question);
+            var questionViewModel = _questionService.GetQuestionById(id);
+
+            if (questionViewModel == null)
+            {
+                return NotFound();
+            }
+
+            return View(questionViewModel);
         }
+
 
         public IActionResult MyAnswers()
         {
@@ -189,31 +196,6 @@ namespace StudentTeacherQnAPlatform.Controllers
 
             return View(question);
         }
-
-        //[HttpPost]
-        //public async Task<IActionResult> SubmitAnswer(int questionId, string content)
-        //{
-        //    var userIdString = HttpContext.Session.GetString("UserId");
-
-        //    if (string.IsNullOrEmpty(userIdString))
-        //    {
-        //        return BadRequest("You must be logged in to submit an answer.");
-        //    }
-
-        //    int userId = int.Parse(userIdString);
-
-        //    var answer = new Answer
-        //    {
-        //        Content = content,
-        //        QuestionId = questionId,
-        //        TeacherId = userId,
-        //        CreatedDate = DateTime.UtcNow
-        //    };
-
-        //    await _questionService.AddAnswerAsync(answer);
-
-        //    return Ok();
-        //}
 
         [HttpPost]
         public async Task<IActionResult> SubmitAnswer(int questionId, string content)

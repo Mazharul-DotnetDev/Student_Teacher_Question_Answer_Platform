@@ -1,9 +1,9 @@
-﻿@model StudentTeacherQnAPlatform.Entities.Question
+﻿@model StudentTeacherQnAPlatform.ViewModels.AnswerQuestionViewModel
 
 <h2>Answer Question: @Model.Title</h2>
 
 <form id="answer-form">
-    <input type="hidden" name="questionId" value="@Model.Id" />
+    <input type="hidden" name="questionId" value="@Model.QuestionId" />
     <div class="form-group">
         <label for="Content">Your Answer</label>
         <textarea id="Content" name="Content" class="form-control" required></textarea>
@@ -39,25 +39,3 @@
         }
     </script>
 }
-
-
-
-
-
-
-
-
-
-@* @model StudentTeacherQnAPlatform.Entities.Question
-
-<h2>Answer Question: @Model.Title</h2>
-
-<form asp-action="SubmitAnswer" method="post">
-    <input type="hidden" name="questionId" value="@Model.Id" />
-    <div class="form-group">
-        <label for="Content">Your Answer</label>
-        <textarea id="Content" name="content" class="form-control" required></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit Answer</button>
-</form>
- *@

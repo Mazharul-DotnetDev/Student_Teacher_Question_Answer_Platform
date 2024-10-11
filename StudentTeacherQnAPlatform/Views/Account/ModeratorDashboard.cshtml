@@ -1,4 +1,4 @@
-﻿@model List<StudentTeacherQnAPlatform.Entities.Question>
+﻿@model List<StudentTeacherQnAPlatform.ViewModels.ModerationQuestionViewModel>
 
 @{
     ViewData["Title"] = "Moderator Dashboard";
@@ -9,13 +9,14 @@
 <div>
     <h3>Welcome, @Context.Session.GetString("UserId")!</h3>
     <p>Here you can review and moderate questions posted by students.</p>
-    
+
     <h4>Moderation Queue</h4>
     <ul>
         @foreach (var question in Model)
         {
             <li>
                 <strong>@question.Title</strong> - @question.Content
+                <p><em>Posted by @question.UserName on @question.CreatedDate</em></p>
                 <a href="@Url.Action("ModerateQuestion", "Account", new { id = question.Id })">Moderate</a>
             </li>
         }

@@ -1,4 +1,4 @@
-﻿@model List<StudentTeacherQnAPlatform.Entities.Answer>
+﻿@model List<StudentTeacherQnAPlatform.ViewModels.TeacherAnswerViewModel>
 
 <h2>My Answers</h2>
 
@@ -6,7 +6,8 @@
     @foreach (var answer in Model)
     {
         <li>
-            Answered Question: <strong>@answer.Question.Title</strong> - @answer.Content
+            Answered Question: <strong>@answer.QuestionTitle</strong> - @answer.AnswerContent
+            <p><small>Posted on @answer.CreatedDate</small></p>
         </li>
     }
 </ul>

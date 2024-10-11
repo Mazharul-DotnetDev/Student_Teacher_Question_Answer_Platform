@@ -1,22 +1,23 @@
 ﻿using StudentTeacherQnAPlatform.Entities;
 using StudentTeacherQnAPlatform.Entities.Security;
+using StudentTeacherQnAPlatform.ViewModels;
 
 namespace StudentTeacherQnAPlatform.Repositories.IRepository
 {
     public interface IQuestionService
     {
         List<Question> GetRecentQuestionsForTeachers();
-        List<Question> GetQuestionsToModerate();
+        List<ModerationQuestionViewModel> GetQuestionsToModerate();
         Task AddQuestionAsync(Question question);
-        List<Question> GetUnansweredQuestions();
+        List<UnansweredQuestionViewModel> GetUnansweredQuestions();
         Task AddAnswerAsync(Answer answer);
-        List<Question> GetAllQuestions();
+        List<QuestionViewModel> GetAllQuestions();
         Task RemoveQuestionAsync(int questionId);
-        List<Question> GetRecentQuestions();
-        List<Question> GetQuestionsByUserId(int userId);
-        Question GetQuestionById(int id);
-        List<Answer> GetAnswersByTeacherId(int teacherId);
-        Task<Question> GetQuestionDetailsAsync(int id);
+        List<RecentQuestionViewModel> GetRecentQuestions();
+        List<UserQuestionViewModel> GetQuestionsByUserId(int userId);
+        AnswerQuestionViewModel GetQuestionById(int id);
+        List<TeacherAnswerViewModel> GetAnswersByTeacherId(int teacherId);
+        Task<QuestionDetailsViewModel> GetQuestionDetailsAsync(int id);
         Task<User> GetUserByIdAsync(int userId);
     }
 }

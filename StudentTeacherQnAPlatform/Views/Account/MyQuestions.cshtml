@@ -1,4 +1,4 @@
-﻿@model List<StudentTeacherQnAPlatform.Entities.Question>
+﻿@model List<StudentTeacherQnAPlatform.ViewModels.UserQuestionViewModel>
 
 @{
     ViewData["Title"] = "My Questions";
@@ -11,6 +11,7 @@
     {
         <li>
             <strong>@question.Title</strong> - @question.Content
+            <p><small>Posted on @question.CreatedDate</small></p>
             <a href="@Url.Action("ViewAnswers", "Account", new { id = question.Id })">View Answers</a>
         </li>
     }

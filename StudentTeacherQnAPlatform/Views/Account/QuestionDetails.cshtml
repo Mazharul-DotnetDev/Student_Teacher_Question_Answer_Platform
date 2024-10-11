@@ -1,19 +1,10 @@
-﻿@model StudentTeacherQnAPlatform.Entities.Question
+﻿@model StudentTeacherQnAPlatform.ViewModels.QuestionDetailsViewModel
 
 <h2>@Model.Title</h2>
 
 <p>@Model.Content</p>
 <p>
-    <strong>Asked by:</strong>
-    @if (Model.User != null)
-    {
-        @Model.User.Name
-    }
-    else
-    {
-        <em>Unknown</em>
-    }
-    on @Model.CreatedDate
+    <strong>Asked by:</strong> @Model.UserName on @Model.CreatedDate
 </p>
 
 <h3>Answers</h3>
@@ -24,7 +15,7 @@
         @foreach (var answer in Model.Answers)
         {
             <li>
-                <strong>@answer.Teacher?.Name:</strong> @answer.Content
+                <strong>@answer.TeacherName:</strong> @answer.Content
                 <p><small>Posted on @answer.CreatedDate</small></p>
             </li>
         }
@@ -66,7 +57,7 @@ else
                     $('#Content').val('');
                     if (response && response.teacherName && response.answerContent && response.createdDate) {
                         var answerHtml = `<li><strong>${response.teacherName}:</strong> ${response.answerContent}
-                        <p><small>Posted on ${response.createdDate}</small></p></li>`;
+                                <p><small>Posted on ${response.createdDate}</small></p></li>`;
                         $('ul').append(answerHtml);
                     }
                 },
@@ -77,3 +68,4 @@ else
         }
     </script>
 }
+

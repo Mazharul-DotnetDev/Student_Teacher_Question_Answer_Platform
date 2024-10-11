@@ -1,4 +1,4 @@
-﻿@model List<StudentTeacherQnAPlatform.Entities.Question>
+﻿@model List<StudentTeacherQnAPlatform.ViewModels.RecentQuestionViewModel>
 
 <h2>Student Dashboard</h2>
 
@@ -32,10 +32,8 @@
                 }
             });
 
-            
             loadRecentQuestions();
 
-            
             $('#question-form').on('submit', function (e) {
                 e.preventDefault();
                 postQuestion();
@@ -83,48 +81,3 @@
         }
     </script>
 }
-
-
-
-
-
-
-
-
-
-
-
-@* @model List<StudentTeacherQnAPlatform.Entities.Question>
-
-@{
-    ViewData["Title"] = "Student Dashboard";
-}
-
-<h2>Student Dashboard</h2>
-
-<div>
-    <h3>Recent Questions</h3>
-    <ul>
-        @foreach (var question in Model)
-        {
-            <li>
-                <strong>@question.Title</strong> - @question.Content
-                <a href="@Url.Action("ViewAnswers", "Account", new { id = question.Id })">View Answers</a>
-            </li>
-        }
-    </ul>
-
-    <h4>Post a New Question</h4>
-    <form asp-action="PostQuestion" method="post">
-        <div class="form-group">
-            <label for="Title">Title</label>
-            <input type="text" id="Title" name="Title" class="form-control" required />
-        </div>
-        <div class="form-group">
-            <label for="Content">Content</label>
-            <textarea id="Content" name="Content" class="form-control" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit Question</button>
-    </form>
-</div>
- *@

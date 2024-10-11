@@ -1,27 +1,18 @@
-﻿@model List<StudentTeacherQnAPlatform.Entities.Question>
+﻿@model List<StudentTeacherQnAPlatform.ViewModels.QuestionViewModel>
 
 <h2>All Questions</h2>
 
 <div class="questions-list">
     @foreach (var question in Model)
-      {
+    {
         <div class="question-item">
             <h3>
                 <a href="@Url.Action("QuestionDetails", "Account", new { id = question.Id })">@question.Title</a>
             </h3>
             <p>@question.Content</p>
             <p>
-                <strong>Posted by:</strong>
-                @if (question.User != null)
-                {
-                    @question.User.Name
-                }
-                else
-                {
-                    <em>Unknown</em>
-                }
-                on @question.CreatedDate
+                <strong>Posted by:</strong> @question.UserName on @question.CreatedDate
             </p>
         </div>
-     }
+    }
 </div>
