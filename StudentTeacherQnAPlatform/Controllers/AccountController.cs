@@ -44,29 +44,10 @@ namespace StudentTeacherQnAPlatform.Controllers
             return View(model);
         }
 
-
         public IActionResult Login()
         {
             return View();
         }
-
-        //[HttpPost]
-        //public async Task<IActionResult> Login(string email, string password)
-        //{
-        //    var user = await _userService.GetUserByEmailAsync(email);
-        //    if (user != null)
-        //    {
-        //        var result = new PasswordHasher<User>().VerifyHashedPassword(user, user.PasswordHash, password);
-        //        if (result == PasswordVerificationResult.Success)
-        //        {
-        //            HttpContext.Session.SetString("UserId", user.Id.ToString());
-        //            HttpContext.Session.SetString("RoleId", user.RoleId.ToString());
-        //            return RedirectToAction("Index", "Home");
-        //        }
-        //    }
-        //    ModelState.AddModelError("", "Invalid login attempt.");
-        //    return View();
-        //}
 
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
@@ -86,8 +67,6 @@ namespace StudentTeacherQnAPlatform.Controllers
             return View();
         }
 
-
-
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();            
@@ -104,17 +83,8 @@ namespace StudentTeacherQnAPlatform.Controllers
         [HttpGet]
         public IActionResult ModeratorDashboard()
         {
-            //if (HttpContext.Session.GetString("UserId") != null &&
-            //    HttpContext.Session.GetString("RoleId") == "3")
-            //{
-            //    return View();
-            //}
-            //return RedirectToAction("Login");
-
             var questionsToModerate = _questionService.GetQuestionsToModerate();
-
             return View(questionsToModerate);
-
         }
 
         public IActionResult StudentDashboard()
@@ -152,21 +122,6 @@ namespace StudentTeacherQnAPlatform.Controllers
             var question = _questionService.GetQuestionById(id);
             return View(question);
         }
-
-        //[HttpPost]
-        //public async Task<IActionResult> SubmitAnswer(int questionId, string content)
-        //{
-        //    var userId = int.Parse(HttpContext.Session.GetString("UserId"));
-        //    var answer = new Answer
-        //    {
-        //        Content = content,
-        //        QuestionId = questionId,
-        //        TeacherId = userId
-        //    };
-
-        //    await _questionService.AddAnswerAsync(answer);
-        //    return RedirectToAction("TeacherDashboard");
-        //}
 
         public IActionResult MyAnswers()
         {
@@ -223,12 +178,6 @@ namespace StudentTeacherQnAPlatform.Controllers
             return RedirectToAction("AllQuestions");
         }
 
-        //public IActionResult QuestionDetails(int id)
-        //{
-        //    var question = _questionService.GetQuestionById(id);
-        //    return View(question);
-        //}
-
         public async Task<IActionResult> QuestionDetails(int id)
         {
             var question = await _questionService.GetQuestionDetailsAsync(id);
@@ -241,11 +190,17 @@ namespace StudentTeacherQnAPlatform.Controllers
             return View(question);
         }
 
-
         //[HttpPost]
         //public async Task<IActionResult> SubmitAnswer(int questionId, string content)
         //{
-        //    var userId = int.Parse(HttpContext.Session.GetString("UserId"));
+        //    var userIdString = HttpContext.Session.GetString("UserId");
+
+        //    if (string.IsNullOrEmpty(userIdString))
+        //    {
+        //        return BadRequest("You must be logged in to submit an answer.");
+        //    }
+
+        //    int userId = int.Parse(userIdString);
 
         //    var answer = new Answer
         //    {
@@ -269,7 +224,7 @@ namespace StudentTeacherQnAPlatform.Controllers
             {
                 return BadRequest("You must be logged in to submit an answer.");
             }
-            
+
             int userId = int.Parse(userIdString);
 
             var answer = new Answer
@@ -281,11 +236,14 @@ namespace StudentTeacherQnAPlatform.Controllers
             };
 
             await _questionService.AddAnswerAsync(answer);
-
-            return Ok();
+            var teacher = await _questionService.GetUserByIdAsync(userId);
+            var teacherName = teacher?.Name ?? "Unknown";
+            return Json(new
+            {
+                teacherName = teacherName,
+                answerContent = answer.Content,
+                createdDate = answer.CreatedDate.ToString("yyyy-MM-dd HH:mm")
+            });
         }
-
-
-
     }
 }

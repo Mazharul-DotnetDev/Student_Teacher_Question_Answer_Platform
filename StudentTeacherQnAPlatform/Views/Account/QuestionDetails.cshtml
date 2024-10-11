@@ -62,16 +62,18 @@ else
                 url: '@Url.Action("SubmitAnswer", "Account")',
                 type: 'POST',
                 data: { questionId: questionId, content: content },
-                success: function () {
-                    alert('Answer submitted successfully!');
-                    console.log('Answer submission successful');
-                    window.location.reload();
+                success: function (response) {
+                    $('#Content').val('');
+                    if (response && response.teacherName && response.answerContent && response.createdDate) {
+                        var answerHtml = `<li><strong>${response.teacherName}:</strong> ${response.answerContent}
+                        <p><small>Posted on ${response.createdDate}</small></p></li>`;
+                        $('ul').append(answerHtml);
+                    }
                 },
                 error: function (error) {
                     console.error('Error posting answer:', error);
                 }
             });
         }
-
     </script>
 }

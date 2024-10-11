@@ -1,4 +1,5 @@
 ﻿using StudentTeacherQnAPlatform.Entities;
+using StudentTeacherQnAPlatform.Entities.Security;
 
 namespace StudentTeacherQnAPlatform.Repositories.IRepository
 {
@@ -16,5 +17,6 @@ namespace StudentTeacherQnAPlatform.Repositories.IRepository
         Question GetQuestionById(int id);
         List<Answer> GetAnswersByTeacherId(int teacherId);
         Task<Question> GetQuestionDetailsAsync(int id);
+        Task<User> GetUserByIdAsync(int userId);
     }
 }

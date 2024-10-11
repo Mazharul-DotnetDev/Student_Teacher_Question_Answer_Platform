@@ -2,6 +2,7 @@
 using StudentTeacherQnAPlatform.Entities;
 using StudentTeacherQnAPlatform.Repositories.IRepository;
 using Microsoft.EntityFrameworkCore;
+using StudentTeacherQnAPlatform.Entities.Security;
 
 namespace StudentTeacherQnAPlatform.Repositories
 {
@@ -88,5 +89,12 @@ namespace StudentTeacherQnAPlatform.Repositories
                     .ThenInclude(a => a.Teacher)
                 .FirstOrDefaultAsync(q => q.Id == id);
         }
+
+        public async Task<User> GetUserByIdAsync(int userId)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        }
+
+
     }
 }
